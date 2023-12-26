@@ -8,12 +8,14 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
-@Service
+@Component
 public class customUserDetailsService implements UserDetailsService {
 
     @Autowired
@@ -27,10 +29,9 @@ public class customUserDetailsService implements UserDetailsService {
         {
             throw new UsernameNotFoundException("User is not registered") ;
         }
-
         Set<GrantedAuthority> authorities = new HashSet<>();
         authorities.add(new SimpleGrantedAuthority(user.getRole()));
-        //return new CustomUserDetails(user);
+     //   return user.map(CustomUserDetails::new).orElseThrow(()->new UsernameNotFoundException("Not found in Systme"));
         return new org.springframework.security.core.userdetails.User(
                 username,
                 user.getPassword(),
